@@ -5,13 +5,15 @@ cabal-version: 2.0
 
 name: trasa-extra
 version: 0.1.0.0
-synopsis: extra functions for trasa
+homepage: https://github.com/goolord/trasa-extra
+synopsis: Extra functions for trasa
+description: Boilerplate code for use with the trasa web framework
 -- description:
 -- bug-reports:
 license: BSD3
 license-file: LICENSE
 author: goolord
-maintainer: zacharyachurchill@gmail.com
+maintainer: Zachary Churchill <zacharyachurchill@gmail.com>
 -- copyright:
 category: Web
 build-type: Simple
@@ -38,3 +40,7 @@ library
     , trasa-server     >= 0.5 && < 0.8
   hs-source-dirs: src
   default-language: Haskell2010
+
+source-repository head
+  type:     git
+  location: https://github.com/goolord/trasa-extra
