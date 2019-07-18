@@ -26,13 +26,13 @@ library
   -- other-extensions:
   build-depends: 
       base >=4.10.0.0 && <5
-    , aeson            >= 1.4.4 && < 1.6
+    , aeson            >= 1.4.0 && < 1.6
     , bytestring       >= 0.10.8 && < 0.12
     , containers       >= 0.6.0 && < 0.8
     , text             >= 1.2.3 && < 1.5
-    , case-insensitive >= 1.2.1 && < 1.5
+    , case-insensitive >= 1.2 && < 1.5
     , cookie           >= 0.4.4 && < 0.6
-    , http-types       >= 0.12.3 && < 0.15
+    , http-types       >= 0.12 && < 0.15
     , mtl              >= 2.2.2 && < 2.4
     , path-pieces      >= 0.2.1 && < 0.4
     , quantification   >= 0.5.0 && < 0.7
