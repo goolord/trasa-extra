@@ -1,9 +1,6 @@
 {-# language LambdaCase #-}
 {-# language OverloadedStrings #-}
 {-# language ScopedTypeVariables #-}
-{-# language RankNTypes #-}
-{-# language DataKinds #-}
-{-# language KindSignatures #-}
 
 {-# OPTIONS_GHC -Wall #-}
 
@@ -14,18 +11,20 @@ module Trasa.Extra
   , encodeRoute
   , decodeRoute
   , redirect
+  , getQueryString
     -- * Header Functions
   , getHeader
   , currentHeader
   , setHeader
   , getCookies
   , lookupCookie
-    -- * Codecs and Parsing
   , setCookie
+    -- * Codecs and Parsing
   , pathPieceCodec
   , bodyAeson
   , aeson
   , decodeInt
+    -- * Errors
   , err404
   ) where
 
@@ -70,6 +69,9 @@ redirect :: IsRoute route => Prepared route response -> LBS.ByteString -> TrasaT
 redirect route message = do
   setHeader "Location" (encodeRoute $ conceal route)
   throwError $ TrasaErr HTTP.status302 message
+
+getQueryString :: MonadIO m => TrasaT m QueryString
+getQueryString = fmap trasaQueryString ask
 
 getHeader :: CI BS.ByteString -> TrasaT IO (Maybe T.Text)
 getHeader idt = fmap (M.lookup idt . trasaHeaders) ask
