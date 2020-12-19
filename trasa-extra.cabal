@@ -4,7 +4,7 @@ cabal-version: 2.0
 -- http://haskell.org/cabal/users-guide/
 
 name: trasa-extra
-version: 0.1.0.0
+version: 0.2.0.0
 homepage: https://github.com/goolord/trasa-extra
 synopsis: Extra functions for trasa
 description: Boilerplate code for use with the trasa web framework

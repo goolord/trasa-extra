@@ -1,13 +1,14 @@
-{-# language LambdaCase #-}
-{-# language OverloadedStrings #-}
-{-# language ScopedTypeVariables #-}
+{-# LANGUAGE 
+    LambdaCase 
+  , OverloadedStrings
+  , ScopedTypeVariables
+#-}
 
 {-# OPTIONS_GHC -Wall #-}
 
 module Trasa.Extra 
   ( -- * Route Functions
-    IsRoute (..)
-  , link
+  , module Trasa.Core.Implicit
   , encodeRoute
   , decodeRoute
   , redirect
@@ -37,6 +38,7 @@ import Data.CaseInsensitive
 import Data.Text (Text)
 import Network.HTTP.Types as HTTP
 import Trasa.Core hiding (optional)
+import Trasa.Core.Implicit
 import Trasa.Server
 import Web.PathPieces
 import qualified Data.ByteString as BS
@@ -50,22 +52,13 @@ import qualified Data.Text.Read as TR
 import qualified Trasa.Method
 import qualified Web.Cookie as Cookie
 
--- | Meta information about your route
-class IsRoute route where
-  metaF :: route caps qrys req resp -> MetaCodec caps qrys req resp
-
-link :: IsRoute route => Concealed route -> Url
-link c = concealedToPrepared c (linkWith (mapMeta captureEncoding captureEncoding id id . metaF))
-
-encodeRoute :: IsRoute route => Concealed route -> Text 
+encodeRoute :: HasMeta route => Concealed route -> Text 
 encodeRoute c = encodeUrl $ link c
 
-decodeRoute :: IsRoute route => Router route -> Text -> Maybe (Concealed route)
-decodeRoute router t = do
-  let url = decodeUrl t
-  either (const Nothing) Just (parseWith (mapMeta id captureDecoding (mapMany bodyDecoding) id . metaF) router Trasa.Method.get url Nothing)
+decodeRoute :: HasMeta route => Router route -> Text -> Maybe (Concealed route)
+decodeRoute router t = either (const Nothing) Just parse
 
-redirect :: IsRoute route => Prepared route response -> LBS.ByteString -> TrasaT IO a
+redirect :: HasMeta route => Prepared route response -> LBS.ByteString -> TrasaT IO a
 redirect route message = do
   setHeader "Location" (encodeRoute $ conceal route)
   throwError $ TrasaErr HTTP.status302 message
